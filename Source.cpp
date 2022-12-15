@@ -197,12 +197,14 @@ public:
 		{
 			temp[i] = new T[m._columns];
 		}
+		/*matrix temp(_columns, m._rows, 1);*/
 
 		for (size_t rows = 0; rows < _rows; rows++)
 		{
 			for (size_t col = 0; col < m._columns; col++)
 			{
 				temp[rows][col] = 0;
+
 				for (size_t inner = 0; inner < _columns; inner++)
 				{
 					temp[rows][col] += data[rows][inner] * m.data[inner][col];
@@ -217,8 +219,10 @@ public:
 			delete[] data[i];
 		}
 		delete[] data;
+		/*~matrix(*this);*/
 
 		data = temp;
+
 		return *this;
 
 	}
@@ -581,8 +585,8 @@ class matrix<complex<T>>
 
 		//оператор деления матрицы на скаляр;
 
-		matrix<complex<T>>& operator/=(T n) {
-			if (n == 0) throw "Division by zero";
+		matrix<complex<T>>& operator/=(complex<T> n) {
+			if (n.real() == 0 and n.imag() == 0) throw "Division by zero";
 			for (size_t i = 0; i < _rows; i++)
 			{
 				for (size_t j = 0; j < _columns; j++)
@@ -593,7 +597,7 @@ class matrix<complex<T>>
 			return *this;
 		}
 
-		matrix operator/(T n) {
+		matrix operator/(complex<T> n) {
 			matrix temp(*this);
 			temp /= n;
 			return temp;
@@ -1194,7 +1198,8 @@ int main()
 
 			matrix<complex<double>> a;
 			matrix<complex<double>> b;
-			double n = 1;
+			double n = 0;
+			complex<double> nn = (0, 0);
 			while (true) {
 
 				system("cls");
@@ -1208,7 +1213,7 @@ int main()
 				cout << "4 - Matrix subtraction" << endl;
 				cout << "5 - Matrix multiplication" << endl;
 				cout << "6 - Multiplication matrix by scalar" << endl;
-				cout << "7 - Division matrix by scalar" << endl;
+				cout << "7 - Division matrix by complex scalar" << endl;
 				cout << "8 - Matrix trace calculation" << endl;
 				cout << "9 - Task" << endl;
 				cout << "0 - Matrix comparison" << endl;
@@ -1223,7 +1228,7 @@ int main()
 					while (l != '1' && l != '2') l = _getch();
 					system("cls");
 				}
-				if (z == '6' || z == '7')
+				if (z == '6')
 				{
 					cout << "Enter  scalar value" << endl;
 					cin >> n;
@@ -1370,8 +1375,15 @@ int main()
 					try
 					{
 						matrix<complex<double>> d;
-						if (l == '1') d = a / n;
-						else d = b / n;
+						double temp_real, temp_imag;
+						cout << "Enter the value: " << endl;
+						cout << "Real: " << endl;
+						cin >> temp_real;
+						cout << "Imag: " << endl;
+						cin >> temp_imag;
+						nn = complex<double>(temp_real, temp_imag);
+						if (l == '1') d = a / nn;
+						else d = b / nn;
 						cout << "Division matrix by scalar" << endl;
 						cout << d;
 					}
